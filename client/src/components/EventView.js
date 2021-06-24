@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { serverUrl } from '../utils/constants';
 import axios from 'axios';
 import _ from 'lodash';
-import ReviewForm from './ReviewForm';
 
 export default function EventView({ user }) {
   let history = useHistory();

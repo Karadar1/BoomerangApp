@@ -1,6 +1,5 @@
 const { v4: uuidv4, validate: uuidValidate } = require('uuid'); //we dont need uuid
 const { validateId, validateString } = require('../utils/validators');
-const { calculateScore } = require('../utils/utils');
 const mongoose = require('mongoose');
 
 const eventModel = require('../models/events');
