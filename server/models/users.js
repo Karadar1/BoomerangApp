@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+const events = require('./events.js');
 
 const userSchema = new Schema({
   uid: {
@@ -28,6 +29,10 @@ const userSchema = new Schema({
     Type: String,
     require: true,
   },
+  events: [{
+    Type: Schema.Types.ObjectId, 
+    ref: "events"
+  }]
 });
 
 userSchema.pre('save', async function (next) {
