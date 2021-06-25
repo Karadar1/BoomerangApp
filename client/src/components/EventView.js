@@ -8,7 +8,6 @@ export default function EventView({ user }) {
   let history = useHistory();
   const [uid, setUid] = useState('');
   const [event, setEvent] = useState({});
-  console.log(event);
   useEffect(async () => {
     if (history && history.location && history.location.pathname) {
       const uid = history.location.pathname.split('/')[2];
@@ -32,7 +31,6 @@ export default function EventView({ user }) {
           if (response.data.error) {
             return history.push('/');
           } else {
-            console.log(response);
             return setEvent(response.data.response);
           }
         });
@@ -69,7 +67,6 @@ export default function EventView({ user }) {
   };
 
   const canParticipate = () => {
-    console.log(user);
     if (user.isBusiness) return false;
     return true;
   };
@@ -92,12 +89,12 @@ export default function EventView({ user }) {
         if (response.data.error) {
           return window.alert(response.data.message);
         } else {
-          setEvent(response.data.data);
+          setEvent(response.data.response);
         }
       });
   };
   const viewUser = () => {
-    history.push(`${serverUrl}/viewUser/${event.authorUid}`);
+    history.push(`/viewUser/${event.authorUid}`);
   };
 
   return (
@@ -142,6 +139,9 @@ export default function EventView({ user }) {
         </>
       )}
       <div className='EventLocation'>
+        <div className='eventDate' onClick={() => viewUser()}>
+          Auhtor: {event.author}
+        </div>
         <a
           rel='noreferrer'
           target='_blank'

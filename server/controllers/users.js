@@ -38,10 +38,27 @@ module.exports = {
   },
 
   getOneUser: async (req, res, next) => {
-    const { uid } = req.paramas;
+    const { uid } = req.params;
     if (validateId(uid)) {
-      await userModel.findOne({ uid }).then((response) => {
-        console.log(response);
+      await userModel
+        .findOne({ uid })
+        .then((response) => {
+          console.log(response);
+          return res.status(200).json({
+            message: 'we found the user',
+            data: response,
+            error: false,
+          });
+        })
+        .catch((error) => {
+          return res
+            .status(200)
+            .json({ message: 'Am prin o eroare', error: true });
+        });
+    } else {
+      return res.status(200).json({
+        message: 'No such user with the specified ID found!',
+        error: true,
       });
     }
   },

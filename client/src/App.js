@@ -9,6 +9,7 @@ import UserEdit from './components/UserEdit';
 import EventAdd from './components/EventAdd';
 import EventEdit from './components/EventEdit';
 import EventView from './components/EventView';
+import { UserView } from './components/UserView';
 
 function App() {
   return (
@@ -53,8 +54,8 @@ function App() {
 
       <Route
         exact
-        path='viewUser/:uid?'
-        render={() => <PortalLayout content={<EventView />} />}
+        path='/viewUser/:uid?'
+        render={() => <PortalLayout content={<UserView />} />}
       />
     </BrowserRouter>
   );
