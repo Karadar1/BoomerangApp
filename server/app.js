@@ -54,26 +54,16 @@ app.get('/user/get', passportJwtValidator, usersController.getUser)
 //creating a new event
 app.post('/events/add', passportJwtValidator, eventsController.addEvent)
 //deleting an event
-app.delete(
-  '/events/delete/:uid',
-  passportJwtValidator,
-  eventsController.deleteEvent
-)
+app.delete('/events/delete/:uid', passportJwtValidator, eventsController.deleteEvent)
 //get an event by id(if no its passed return all)
 app.get('/events/get/:uid?', passportJwtValidator, eventsController.getEvent)
 
-app.get(
-  '/events/all/:count/:offset',
-  passportJwtValidator,
-  eventsController.getEvents
-)
+app.get('/events/all/:count/:offset', passportJwtValidator, eventsController.getEvents)
 //this will update a specific event
 app.post('/events/edit/:uid', passportJwtValidator, eventsController.editEvent)
 //partipate to an event
-app.post(
-  '/events/participate/:uid',
-  passportJwtValidator,
-  eventsController.participateEvent
-)
+app.post('/events/participate/:uid', passportJwtValidator, eventsController.participateEvent)
+
+app.post('/subevents/add/:uid', passportJwtValidator, eventsController.addSubevent)
 
 module.exports = app
