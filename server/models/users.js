@@ -21,18 +21,25 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    require: true,
+    required: true,
     minLenght: 8,
   },
 
   accountType: {
-    Type: String,
-    require: true,
+    type: String,
+    required: true,
   },
-  events: [{
-    Type: Schema.Types.ObjectId, 
-    ref: "events"
-  }]
+  events: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'events',
+    },
+  ],
+
+  iterests: {
+    type: String,
+    required: true,
+  },
 });
 
 userSchema.pre('save', async function (next) {

@@ -80,8 +80,21 @@ module.exports = {
         })
         .populate('tasks')
         .then((response) => {
-          // console.log(response)
-
+          // const data = {
+          //   participants: participants,
+          //   subprojects: subprojects,
+          //   tasks: tasks,
+          //   uid: uid,
+          //   alreadyReviewed: already_reviewed,
+          //   reviews: reviews,
+          //   title: title,
+          //   description: description,
+          //   author: author,
+          //   authorUid: authorUid,
+          //   date: date,
+          //   timeStamp: timeStamp,
+          //   location: location,
+          // };
           return res
             .status(200)
 
@@ -216,7 +229,6 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
-            console.log(response);
             return res
               .status(200)
 
@@ -239,7 +251,6 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
-            console.log(response);
             return res
               .status(200)
 
@@ -258,9 +269,7 @@ module.exports = {
     }
   },
   addSubevent: async (req, res, next) => {
-    console.log(req.params);
     const { event_uid } = req.params;
-    console.log(event_uid);
     const uid = uuidv4();
     let { title, description, date, timeStamp, location } = req.body;
     const author = req.user.username;
@@ -284,7 +293,6 @@ module.exports = {
             { $push: { subprojects: subproject } }
           )
           .then((response) => {
-            console.log(response);
             if (response) {
               return res
                 .status(200)
