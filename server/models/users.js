@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const Schema = mongoose.Schema
 const events = require('./events.js');
 
 const userSchema = new Schema({
@@ -24,35 +24,34 @@ const userSchema = new Schema({
     require: true,
     minLenght: 8,
   },
-
   accountType: {
-    Type: String,
+    type: String,
     require: true,
   },
   events: [{
-    Type: Schema.Types.ObjectId, 
+    type: Schema.Types.ObjectId, 
     ref: "events"
   }]
-});
+})
 
 userSchema.pre('save', async function (next) {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(this.password, salt);
-    this.password = hash;
-    next();
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(this.password, salt)
+    this.password = hash
+    next()
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
 userSchema.methods.validatePassword = async function (userPassword) {
   try {
-    return await bcrypt.compare(userPassword, this.password);
+    return await bcrypt.compare(userPassword, this.password)
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-const userModel = mongoose.model('users', userSchema);
-module.exports = userModel;
+const userModel = mongoose.model('users', userSchema)
+module.exports = userModel
