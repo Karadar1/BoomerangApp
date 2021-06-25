@@ -80,6 +80,11 @@ const tasksSchema = new Schema({
   participants: {
     type: Array,
     default: [],
+  },
+  taskStatus: {
+    type: String,
+    required: true,
+    default: "active"
   }
 });
 
