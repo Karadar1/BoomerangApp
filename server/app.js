@@ -64,6 +64,8 @@ app.post('/events/edit/:uid', passportJwtValidator, eventsController.editEvent)
 //partipate to an event
 app.post('/events/participate/:uid', passportJwtValidator, eventsController.participateEvent)
 
-app.post('/subevents/add/:uid', passportJwtValidator, eventsController.addSubevent)
+app.post('/subevents/add/:event_uid', passportJwtValidator, eventsController.addSubevent)
+
+app.post('/tasks/add/:event_uid', passportJwtValidator, eventsController.addTask)
 
 module.exports = app

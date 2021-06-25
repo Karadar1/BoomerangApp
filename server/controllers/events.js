@@ -67,26 +67,21 @@ module.exports = {
     if (validateId(uid)) {
       await eventModel
         .findOne({ uid })
-        .populate("subprojects")
+        .populate({
+          path: "subprojects",
+        populate: {
+          path: 'tasks',
+          model: 'tasks'
+        }
+      })
+        .populate("tasks")
         .then((response) => {
           console.log(response)
-          const data = {
-            
-            authorUid: response.authorUid,
-            uid: response.uid,
-            title: response.title,
-            author: response.author,
-            description: response.description,
-            date: response.date,
-            timeStamp: response.timeStamp,
-            location: response.location,
-            participants: response.participants,
-          }
-          console.log("_ID IS", data._id)
+          
           return res
             .status(200)
 
-            .json({ message: 'we found the event', data, error: false })
+            .json({ message: 'we found the event', response, error: false })
         })
         .catch((error) => {
           return res
@@ -199,28 +194,6 @@ module.exports = {
       return res.status(200).json({ message: 'invalid id' })
     }
   },
-  addSubevent: async (req, res, next) => {
-    const { event_uid } = req.params
-    const uid = uuidv4()
-    let { title, description, date, timeStamp, location } = req.body
-    const author = req.user.username
-    const authorUid = req.user.uid
-
-    subprojectsModel.create({
-      uid,
-      title,
-      description,
-      author,
-      authorUid,
-      date,
-      timeStamp,
-      location,
-    }).then(function(subproject) {
-      eventModel.findOneAndUpdate({event_uid}, {$push: {subprojects: subproject}}).then((response) => {
-        return res.status(200).json({message: 'subevent created.'})
-      })
-    })
-  },
   participateEvent: async (req, res, next) => {
     const { uid } = req.params
     const participant = {
@@ -280,4 +253,55 @@ module.exports = {
       }
     }
   },
+  addSubevent: async (req, res, next) => {
+    const { event_uid } = req.params
+    const uid = uuidv4()
+    let { title, description, date, timeStamp, location } = req.body
+    const author = req.user.username
+    const authorUid = req.user.uid
+
+    subprojectsModel.create({
+      uid,
+      title,
+      description,
+      author,
+      authorUid,
+      date,
+      timeStamp,
+      location,
+    }).then(function(subproject) {
+      eventModel.findOneAndUpdate({event_uid}, {$push: {subprojects: subproject}}).then((response) => {
+        return res.status(200).json({error: false, message: 'subevent created.'})
+      })
+    })
+  },
+  addTask: async(req, res, next) => {
+    const { event_uid } = req.params
+    const uid = uuidv4()
+    let { title, description, date, timeStamp, location } = req.body
+    const author = req.user.username
+    const authorUid = req.user.uid
+
+    tasksModel.create({
+      uid,
+      title,
+      description,
+      author,
+      authorUid,
+      date,
+      timeStamp,
+      location,
+    }).then(function(task) {
+      eventModel.findOneAndUpdate({"uid": event_uid}, {$push: {tasks: task}}).then((response) => {
+        if(!response) {
+          subprojectsModel.findOneAndUpdate({uid: event_uid}, {$push: {tasks: task}}).then((response) => {
+            return res.status(200).json({error: false, message: 'task added'})
+          })
+        } else {
+          return res.status(200).json({error: false, message: 'task added'})
+        }
+      })
+    })
+
+  }
 }

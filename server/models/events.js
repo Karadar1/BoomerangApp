@@ -37,11 +37,50 @@ const subProjectSchema = new Schema({
   participants: {
     type: Array,
     default: [],
-  }
+  },
+  tasks: [{
+    type: Schema.Types.ObjectId,
+    ref: "tasks"
+  }]
 });
 
 const tasksSchema = new Schema({
-
+  uid: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    maxLength: 400,
+  },
+  author: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    maxLength: 50,
+  },
+  authorUid: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
+  timeStamp: {
+    type: String,
+    required: true,
+  },
+  participants: {
+    type: Array,
+    default: [],
+  }
 });
 
 const eventSchema = new Schema({
@@ -84,6 +123,10 @@ const eventSchema = new Schema({
   subprojects: [{
     type: Schema.Types.ObjectId,
     ref: "subprojects"
+  }],
+  tasks: [{
+    type: Schema.Types.ObjectId,
+    ref: "tasks"
   }]
 })
 const subprojectsModel = mongoose.model('subprojects', subProjectSchema)

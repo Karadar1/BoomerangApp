@@ -32,7 +32,8 @@ export default function EventView({ user }) {
           if (response.data.error) {
             return history.push('/')
           } else {
-            return setEvent(response.data.data)
+            console.log(response)
+            return setEvent(response.data.response)
           }
         })
     }
@@ -97,7 +98,9 @@ export default function EventView({ user }) {
   }
 
   return (
+    
     <div className="Event EventView" id={event.uid} key={event.uid}>
+      
       <div className="EventBar">
         <div className="EventTitle">{event.title}</div>
       </div>
