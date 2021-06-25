@@ -254,7 +254,9 @@ module.exports = {
     }
   },
   addSubevent: async (req, res, next) => {
+    console.log(req.params)
     const { event_uid } = req.params
+    console.log(event_uid)
     const uid = uuidv4()
     let { title, description, date, timeStamp, location } = req.body
     const author = req.user.username
@@ -270,8 +272,15 @@ module.exports = {
       timeStamp,
       location,
     }).then(function(subproject) {
-      eventModel.findOneAndUpdate({event_uid}, {$push: {subprojects: subproject}}).then((response) => {
-        return res.status(200).json({error: false, message: 'subevent created.'})
+      eventModel.findOneAndUpdate({"uid": event_uid}, {$push: {subprojects: subproject}}).then((response) => {
+        console.log(response)
+        if(response) {
+          return res.status(200).json({error: false, message: 'subevent created.'})
+        } else {
+          return res.status(200).json({error: true, message: 'an unknown erorr occured  .'})
+        }
+        
+        
       })
     })
   },
