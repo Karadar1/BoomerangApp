@@ -275,8 +275,8 @@ module.exports = {
             findOneAndUpdate(
               {"uid": req.user.uid},
               {$push: {events: response}}
-            ).then((response) => {
-              console.log("ojBOUFBEROUFBRGYBRTG", response)
+            ).then((repspnse) => {
+              console.log("BRUH BRUH", response)
             })
             return res
               .status(200)
@@ -301,6 +301,13 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {events: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
             return res
               .status(200)
 
