@@ -168,12 +168,19 @@ a {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media (max-width: 600px) {
   .Form {
     width: calc(100% - 100px);
   }
   .Event {
-    width: calc(100% / 1.1) !important;
+    position: relative;
+    left: calc(50% - 150px);
+    top: 5%;
+    width: 200px;
+    height: 300px;
+  }
+  .EventTitle {
+    color: orange;
   }
   .Right {
     display: flex;
@@ -254,12 +261,11 @@ a {
   justify-content: center;
 }
 .Event {
-  background: white;
-  margin: 5px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05),
-    inset 0px 4px 4px rgba(0, 0, 0, 0.05);
-  width: calc(100% / 2.5);
+  position: relative;
+  left: calc(50% - 250px);
+  top: 5%;
+  width: 500px;
+  height: 750px;
 }
 .EventBar {
   width: 100%;
@@ -270,7 +276,7 @@ a {
 .EventAuthor {
   float: right;
 }
-.EventTitle {
+/* .EventTitle {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -281,11 +287,11 @@ a {
   font-weight: bold;
   font-size: 20px;
   border-radius: 10px 10px 0 0;
-}
+} */
 .EventDescription {
   margin: 10px;
 }
-.ReadMoreBtn {
+/* .ReadMoreBtn {
   margin: 10px auto !important;
   color: white;
   padding: 10px 20px;
@@ -294,15 +300,15 @@ a {
 }
 .EventLocation {
   padding: 10px;
-}
-.EventView {
+} */
+/* .EventView {
   position: fixed;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-}
-
+} */
+/* 
 .eventDate {
   font-family: Montserrat;
   font-style: normal;
@@ -315,4 +321,19 @@ a {
   color: var(--boomerang-color-1);
   text-decoration: none;
   padding-top: 5px;
+} */
+
+/* Tudor Styling Take */
+.EventMidSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.participateIcon {
+  width: 30px;
+}
+.iconDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

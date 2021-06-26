@@ -3,23 +3,28 @@ import { useHistory } from 'react-router-dom';
 import { serverUrl } from '../utils/constants';
 import axios from 'axios';
 import _ from 'lodash';
+import participateIcon from '../assets/icons/support.svg';
+import leaveIcon from '../assets/icons/logout.svg';
 
 export default function EventView({ user }) {
   let history = useHistory();
   const [uid, setUid] = useState('');
   const [event, setEvent] = useState({});
-  useEffect(async () => {
+
+  useEffect(() => {
     if (history && history.location && history.location.pathname) {
       const uid = history.location.pathname.split('/')[2];
       if (uid !== '') {
-        await setUid(uid);
+        setUid(uid);
       } else {
         return history.push('/');
       }
     } else {
       return history.push('/');
     }
+  }, []);
 
+  useEffect(async () => {
     if (uid !== '') {
       await axios
         .get(`${serverUrl}/events/get/${uid}`, {
@@ -59,7 +64,7 @@ export default function EventView({ user }) {
   };
   //TODO complete logic
   const alreadyParticipate = () => {
-    if (event.participants.length === 0) return false;
+    if (event?.participants.length === 0) return false;
     let newIsUserParticipating = event.participants.some(
       (eachParticipant) => eachParticipant.uid === user.uid
     );
@@ -70,11 +75,12 @@ export default function EventView({ user }) {
     if (user.isBusiness) return false;
     return true;
   };
-
+  console.log(event);
   const eventSendInfo = () => {
     history.push(`/editEvent/${uid}`);
   };
-  const sendParticitipation = async () => {
+  const sendParticitipation = async (event) => {
+    event.preventDefault();
     await axios
       .post(
         `${serverUrl}/events/participate/${uid}`,
@@ -89,14 +95,14 @@ export default function EventView({ user }) {
         if (response.data.error) {
           return window.alert(response.data.message);
         } else {
-          setEvent(response.data.response);
+          setEvent(response.data.data);
         }
       });
   };
   const viewUser = () => {
     history.push(`/viewUser/${event.authorUid}`);
   };
-
+  if (uid === '' || _.isEmpty(event)) return false;
   return (
     <div className='Event EventView' id={event.uid} key={event.uid}>
       <div className='EventBar'>
@@ -119,38 +125,41 @@ export default function EventView({ user }) {
               </div>
             </>
           ) : null}
-          {canParticipate() ? (
-            alreadyParticipate() ? (
-              <div
-                className='RoundButton RoundButtonEvent'
-                onClick={() => sendParticitipation()}
-              >
-                Cancel participation
-              </div>
-            ) : (
-              <div
-                className='RoundButton RoundButtonEvent'
-                onClick={() => sendParticitipation()}
-              >
-                Participate
-              </div>
-            )
-          ) : null}
         </>
       )}
-      <div className='EventLocation'>
-        <div className='eventDate' onClick={() => viewUser()}>
-          Auhtor: {event.author}
+      <div className='EventMidSection'>
+        <div className='EventInfo'>
+          <div className='eventDate' onClick={() => viewUser()}>
+            Auhtor: {event.author}
+          </div>
+          <a
+            rel='noreferrer'
+            target='_blank'
+            href={`https://www.google.com/maps/search/${event.location}`}
+          >
+            <div>Location : {` ${event.location}`}</div>
+          </a>
+          <div className='eventDate'>Time: {event.timeStamp}</div>
+          <div className='eventDate'>Date: {event.date}</div>
         </div>
-        <a
-          rel='noreferrer'
-          target='_blank'
-          href={`https://www.google.com/maps/search/${event.location}`}
-        >
-          <div>Location : {` ${event.location}`}</div>
-        </a>
-        <div className='eventDate'>Time: {event.timeStamp}</div>
-        <div className='eventDate'>Date: {event.date}</div>
+
+        {canParticipate() ? (
+          alreadyParticipate() ? (
+            <div onClick={sendParticitipation} className='iconDiv'>
+              <img src={leaveIcon} alt='leave' className='participateIcon' />
+              <h4>Leave</h4>
+            </div>
+          ) : (
+            <div onClick={sendParticitipation} className='iconDiv'>
+              <img
+                src={participateIcon}
+                alt='participate'
+                className='participateIcon'
+              />
+              <h4>Join</h4>
+            </div>
+          )
+        ) : null}
       </div>
     </div>
   );
