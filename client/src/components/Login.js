@@ -53,7 +53,7 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <div className='loginBox'>
       <p className="Label">Email</p>
       <div className="InputWrapper">{renderInput()}</div>
       <p className="Label">Password</p>
