@@ -81,6 +81,8 @@ app.post(
 
 app.get('/events/approve/:uid', passportJwtValidator, eventsController.approveEvent)
 
+app.delete('/events/deny/:uid', passportJwtValidator, eventsController.denyEvent)
+
 
 app.post(
   '/subevents/add/:event_uid',

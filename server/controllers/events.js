@@ -184,7 +184,27 @@ module.exports = {
 
   },
   denyEvent: async (req, res, next) => {
-
+    const { uid } = req.params;
+    if(req.user.accountType === "admin") {
+      await eventModel.
+      findOneAndDelete(
+        { uid }
+      )
+      .then((response) =>{ 
+        return res
+          .status(200)
+          .json({message: "Event has been denied", error: false})
+      })
+      .catch((error) => {
+        return res
+          .status(200)
+          .json({message: data, error: true})
+      })
+    } else {
+      return res
+        .status(200)
+        .json({message: "Not authorized for the following action", error: true})
+    }
   },
   editEvent: async (req, res, next) => {
     const { uid } = req.params;

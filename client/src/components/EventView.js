@@ -48,6 +48,17 @@ export default function EventView({ user }) {
     })
   }
 
+ const eventDeny = async () => {
+  await axios.delete(`${serverUrl}/events/deny/${uid}`, {
+    headers: {
+      Authorization: localStorage.getItem('token'),
+    },
+  })
+  .then((response) =>{
+    return response;
+  })
+ }
+
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
@@ -137,6 +148,9 @@ export default function EventView({ user }) {
           </a>
           <div className='ReadMoreBtn Button' onClick={() => eventApprove()}>
                   Approve
+          </div>
+          <div className='ReadMoreBtn Button' onClick={() => eventDeny()}>
+                  Deny
           </div>
           <div className='eventDate'>Time: {event.timeStamp}</div>
           <div className='eventDate'>Date: {event.date}</div>
