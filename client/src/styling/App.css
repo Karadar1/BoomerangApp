@@ -161,16 +161,22 @@ a {
 @media only screen and (min-width: 600px) {
   .Form {
     min-width: 300px;
+    margin-top: 35px ;
+  }
+  .LogButton{
+    margin: 10px;
   }
   .Navbar {
     position: sticky;
     top: 0;
   }
+  
 }
 
 @media only screen and (max-width: 600px) {
   .Form {
     width: calc(100% - 100px);
+    margin-top: 20px;
   }
   .Event {
     width: calc(100% / 1.1) !important;
@@ -187,6 +193,9 @@ a {
   }
   .Container {
     height: calc(80vh - 40px) !important;
+  }
+  .LogButton{
+    margin: 5px;
   }
 }
 
@@ -329,3 +338,5 @@ a {
   text-decoration: none;
   padding-top: 5px;
 }
+
+/* NEW styling on components */

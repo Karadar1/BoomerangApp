@@ -17,7 +17,9 @@ export default function LoginLayout({ content }) {
       <div className="LogoWrapper">
         <img src={logo} alt={logo} className="Logo" />
       </div>
-      <div className="Form">{content}</div>
+      <div className="Form">
+            {content}
+        </div>
     </div>
   )
 }
