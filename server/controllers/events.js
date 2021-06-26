@@ -113,33 +113,24 @@ module.exports = {
     }
   },
   getEvents: async (req, res, next) => {
+
     const { count, offset } = req.params;
     let eventsInDatabase;
     await eventModel.countDocuments({}, (err, c) => {
       eventsInDatabase = c;
     });
-    await eventModel
+    // TODO FIX THIS HACKED UP MESS
+    if(req.user.accountType == "admin") {
+      await eventModel
       .find({})
       .limit(parseInt(count))
       .skip(parseInt(offset))
       .then((response) => {
-        const reducedArray = response.reduce((accumulator, currentValue) => {
-          const reducedObject = {
-            uid: currentValue.uid,
-            title: currentValue.title,
-            author: currentValue.author,
-            description: currentValue.description,
-            date: currentValue.date,
-            timeStamp: currentValue.timeStamp,
-            location: currentValue.location,
-            participants: currentValue.participants,
-          };
-          return [...accumulator, reducedObject];
-        }, []);
+
 
         return res.status(200).json({
-          message: 'We found events',
-          data: reducedArray,
+          message: 'Admin account // serving all events',
+          data: response,
           error: false,
           eventsInDatabase,
         });
@@ -147,6 +138,25 @@ module.exports = {
       .catch((error) => {
         return res.status(200).json({ message: 'failed attempt', error: true });
       });
+    } else {
+      await eventModel
+      .find({"accepted": true})
+      .limit(parseInt(count))
+      .skip(parseInt(offset))
+      .then((response) => {
+
+        return res.status(200).json({
+          message: 'We found events',
+          data: response,
+          error: false,
+          eventsInDatabase,
+        });
+      })
+      .catch((error) => {
+        return res.status(200).json({ message: 'failed attempt', error: true });
+      });
+    }
+
   },
   editEvent: async (req, res, next) => {
     const { uid } = req.params;

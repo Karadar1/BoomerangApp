@@ -125,6 +125,11 @@ const eventSchema = new Schema({
     type: Array,
     default: [],
   },
+  accepted: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   subprojects: [{
     type: Schema.Types.ObjectId,
     ref: "subprojects"

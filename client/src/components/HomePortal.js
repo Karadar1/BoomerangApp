@@ -82,6 +82,9 @@ export default function EventList({ user, search }) {
               <div className="eventDate">
                 Participants : {event.participants.length}
               </div>
+              <div className="eventStatus">
+                Accepted: {event.accepted.toString()}
+              </div>
             </div>
           </div>
         </div>

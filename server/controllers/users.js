@@ -23,7 +23,6 @@ tokenSign = (user) => {
 
 module.exports = {
   getUser: async (req, res, next) => {
-
     return res.status(200).json({
       message: 'User found',
       error: false,
