@@ -37,10 +37,17 @@ export default function EventView({ user }) {
     }
   }, [uid]);
 
+
+
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
   };
+
+  const isUserAdmin = () => {
+    if(user.accountType === "admin") return true;
+    return false;
+  }
 
   const eventDelete = async () => {
     await axios
@@ -97,61 +104,93 @@ export default function EventView({ user }) {
     history.push(`/viewUser/${event.authorUid}`);
   };
 
-  return (
-    <div className='Event EventView' id={event.uid} key={event.uid}>
-      <div className='EventBar'>
-        <div className='EventTitle'>{event.title}</div>
-      </div>
 
-      <div className='EventDescription'>{event.description}</div>
-      {!_.isEmpty(event) && (
-        <>
-          {hasAdminRights() ? (
-            <>
-              <div
-                className='ReadMoreBtn Button'
-                onClick={() => eventSendInfo()}
-              >
-                Edit
-              </div>
-              <div className='ReadMoreBtn Button' onClick={() => eventDelete()}>
-                Delete
-              </div>
-            </>
-          ) : null}
-          {canParticipate() ? (
-            alreadyParticipate() ? (
-              <div
-                className='RoundButton RoundButtonEvent'
-                onClick={() => sendParticitipation()}
-              >
-                Cancel participation
-              </div>
-            ) : (
-              <div
-                className='RoundButton RoundButtonEvent'
-                onClick={() => sendParticitipation()}
-              >
-                Participate
-              </div>
-            )
-          ) : null}
-        </>
-      )}
-      <div className='EventLocation'>
-        <div className='eventDate' onClick={() => viewUser()}>
-          Auhtor: {event.author}
+  if(isUserAdmin()) {
+
+    return (
+      <div className='Event EventView' id={event.uid} key={event.uid}>
+        <div className='EventBar'>
+          <div className='EventTitle'>{event.title}</div>
         </div>
-        <a
-          rel='noreferrer'
-          target='_blank'
-          href={`https://www.google.com/maps/search/${event.location}`}
-        >
-          <div>Location : {` ${event.location}`}</div>
-        </a>
-        <div className='eventDate'>Time: {event.timeStamp}</div>
-        <div className='eventDate'>Date: {event.date}</div>
+  
+        <div className='EventDescription'>{event.description}</div>
+
+        <div className='EventLocation'>
+          <div className='eventDate' onClick={() => viewUser()}>
+            Auhtor: {event.author}
+          </div>
+          <a
+            rel='noreferrer'
+            target='_blank'
+            href={`https://www.google.com/maps/search/${event.location}`}
+          >
+            <div>Location : {` ${event.location}`}</div>
+          </a>
+          <div className='eventDate'>Time: {event.timeStamp}</div>
+          <div className='eventDate'>Date: {event.date}</div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+
+    return (
+      <div className='Event EventView' id={event.uid} key={event.uid}>
+        <div className='EventBar'>
+          <div className='EventTitle'>{event.title}</div>
+        </div>
+  
+        <div className='EventDescription'>{event.description}</div>
+        {!_.isEmpty(event) && (
+          <>
+            {hasAdminRights() ? (
+              <>
+                <div
+                  className='ReadMoreBtn Button'
+                  onClick={() => eventSendInfo()}
+                >
+                  Edit
+                </div>
+                <div className='ReadMoreBtn Button' onClick={() => eventDelete()}>
+                  Delete
+                </div>
+              </>
+            ) : null}
+            {canParticipate() ? (
+              alreadyParticipate() ? (
+                <div
+                  className='RoundButton RoundButtonEvent'
+                  onClick={() => sendParticitipation()}
+                >
+                  Cancel participation
+                </div>
+              ) : (
+                <div
+                  className='RoundButton RoundButtonEvent'
+                  onClick={() => sendParticitipation()}
+                >
+                  Participate
+                </div>
+              )
+            ) : null}
+          </>
+        )}
+        <div className='EventLocation'>
+          <div className='eventDate' onClick={() => viewUser()}>
+            Auhtor: {event.author}
+          </div>
+          <a
+            rel='noreferrer'
+            target='_blank'
+            href={`https://www.google.com/maps/search/${event.location}`}
+          >
+            <div>Location : {` ${event.location}`}</div>
+          </a>
+          <div className='eventDate'>Time: {event.timeStamp}</div>
+          <div className='eventDate'>Date: {event.date}</div>
+        </div>
+      </div>
+    );
+
+  }
+
 }
