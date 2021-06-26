@@ -42,9 +42,6 @@ export default function PortalLayout({ content }) {
           },
         })
         .then((response) => {
-          if (response.data.data.accountType == "admin") {
-            //return history.push('/adminDashboard')
-          }
           return setUser(response.data.data)
         })
         .catch((err) => {

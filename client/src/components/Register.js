@@ -38,7 +38,7 @@ export default function Register() {
       case 'accountType': {
         return (
           <input
-            onChange={(event) => setAccountType(event.target.checked)}
+            onChange={(event) => event.target.checked ? setAccountType("org") : setAccountType("volunteer") }
             type="checkbox"
           />
         )
@@ -103,7 +103,7 @@ export default function Register() {
         {renderInput('password_verify')}
       </div>
       <div className="InputWrapper Label">
-        {renderInput('accountType')} Business account
+        {renderInput('accountType')} I am an organization.
       </div>
 
       <br />

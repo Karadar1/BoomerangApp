@@ -119,8 +119,6 @@ module.exports = {
     await eventModel.countDocuments({}, (err, c) => {
       eventsInDatabase = c;
     });
-    // TODO FIX THIS HACKED UP MESS
-    if(req.user.accountType == "admin") {
       await eventModel
       .find({})
       .limit(parseInt(count))
@@ -129,7 +127,7 @@ module.exports = {
 
 
         return res.status(200).json({
-          message: 'Admin account // serving all events',
+          message: 'serving all events',
           data: response,
           error: false,
           eventsInDatabase,
@@ -138,27 +136,10 @@ module.exports = {
       .catch((error) => {
         return res.status(200).json({ message: 'failed attempt', error: true });
       });
-    } else {
-      await eventModel
-      .find({"accepted": true})
-      .limit(parseInt(count))
-      .skip(parseInt(offset))
-      .then((response) => {
-
-        return res.status(200).json({
-          message: 'We found events',
-          data: response,
-          error: false,
-          eventsInDatabase,
-        });
-      })
-      .catch((error) => {
-        return res.status(200).json({ message: 'failed attempt', error: true });
-      });
-    }
+   
 
   },
-  approveEvent: async (req, res, next) => {
+  /*approveEvent: async (req, res, next) => {
     const { uid } = req.params;
     if(req.user.accountType === "admin") {
       await eventModel.
@@ -205,7 +186,7 @@ module.exports = {
         .status(200)
         .json({message: "Not authorized for the following action", error: true})
     }
-  },
+  },*/
   editEvent: async (req, res, next) => {
     const { uid } = req.params;
     let { description, title } = req.body;

@@ -30,6 +30,41 @@ module.exports = {
     });
   },
 
+  getOrgs: async (req, res, next) => {
+    await userModel
+      .find({"accountType": "org"})
+      .then((response) => {
+        return res.status(200).json({
+          message: "We found the organizations",
+          data: response,
+          error: false
+        })
+      })
+      .catch((error) => {
+        return res.status(200).json({
+          error: true, 
+          message: error
+        })
+      })
+  },
+  denyOrg: async (req, res, next) => {
+    const { uid } = req.params;
+    await userModel.findOneAndDelete({ uid }).then((response) => {
+      return res.status(200).json({
+        message: "Organization has been denied",
+        data: response
+      })
+    })
+  },
+  approveOrg: async(req, res, next) => {
+    const { uid } = req.params;
+    await userModel.findOneAndUpdate({"approved": true}).then((response) =>{
+      return res.status(200).json({
+        message: "Organization has been approved",
+        data: response
+      })
+    })
+  },
   getOneUser: async (req, res, next) => {
     const { uid } = req.params;
     if (validateId(uid)) {
@@ -58,6 +93,10 @@ module.exports = {
 
   signUpUser: async (req, res, next) => {
     const { username, password, email, accountType } = req.body;
+    let approved = 'user';
+    if(accountType === "org") {
+      approved = false
+    }
     const uid = uuidv4();
     let userFound = await userModel.findOne({ username });
     if (userFound) {
@@ -72,6 +111,7 @@ module.exports = {
       email,
       uid,
       accountType,
+      approved
     });
     await newUser.save();
 

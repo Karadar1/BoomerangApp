@@ -79,10 +79,9 @@ app.post(
   eventsController.participateEvent
 );
 
-app.get('/events/approve/:uid', passportJwtValidator, eventsController.approveEvent)
-
-app.delete('/events/deny/:uid', passportJwtValidator, eventsController.denyEvent)
-
+app.get('/orgs/get', passportJwtValidator, usersController.getOrgs);
+app.get('/orgs/approve/:uid', passportJwtValidator, usersController.approveOrg);
+app.delete('/orgs/deny/:uid', passportJwtValidator, usersController.denyOrg);
 
 app.post(
   '/subevents/add/:event_uid',

@@ -37,28 +37,7 @@ export default function EventView({ user }) {
     }
   }, [uid]);
 
-  const eventApprove = async () => {
-    await axios.get(`${serverUrl}/events/approve/${uid}`, {
-      headers: {
-        Authorization: localStorage.getItem('token'),
-      },
-    })
-    .then((response) =>{
-      return response;
-    })
-  }
-
- const eventDeny = async () => {
-  await axios.delete(`${serverUrl}/events/deny/${uid}`, {
-    headers: {
-      Authorization: localStorage.getItem('token'),
-    },
-  })
-  .then((response) =>{
-    return response;
-  })
- }
-
+ 
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
@@ -125,39 +104,6 @@ export default function EventView({ user }) {
   };
 
 
-  if(isUserAdmin()) {
-
-    return (
-      <div className='Event EventView' id={event.uid} key={event.uid}>
-        <div className='EventBar'>
-          <div className='EventTitle'>{event.title}</div>
-        </div>
-  
-        <div className='EventDescription'>{event.description}</div>
-
-        <div className='EventLocation'>
-          <div className='eventDate' onClick={() => viewUser()}>
-            Auhtor: {event.author}
-          </div>
-          <a
-            rel='noreferrer'
-            target='_blank'
-            href={`https://www.google.com/maps/search/${event.location}`}
-          >
-            <div>Location : {` ${event.location}`}</div>
-          </a>
-          <div className='ReadMoreBtn Button' onClick={() => eventApprove()}>
-                  Approve
-          </div>
-          <div className='ReadMoreBtn Button' onClick={() => eventDeny()}>
-                  Deny
-          </div>
-          <div className='eventDate'>Time: {event.timeStamp}</div>
-          <div className='eventDate'>Date: {event.date}</div>
-        </div>
-      </div>
-    );
-  } else {
 
     return (
       <div className='Event EventView' id={event.uid} key={event.uid}>
@@ -217,6 +163,5 @@ export default function EventView({ user }) {
       </div>
     );
 
-  }
 
 }

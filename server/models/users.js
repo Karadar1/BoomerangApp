@@ -39,6 +39,11 @@ const userSchema = new Schema({
     type: String,
     default: ''
   },
+  approved: {
+    type: String,
+    required: true,
+    default: 'user'
+  }
 });
 
 userSchema.pre('save', async function (next) {
