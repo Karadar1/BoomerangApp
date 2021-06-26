@@ -83,6 +83,7 @@ app.get('/orgs/get', passportJwtValidator, usersController.getOrgs);
 app.get('/orgs/approve/:uid', passportJwtValidator, usersController.approveOrg);
 app.delete('/orgs/deny/:uid', passportJwtValidator, usersController.denyOrg);
 
+
 app.post(
   '/subevents/add/:event_uid',
   passportJwtValidator,
@@ -95,5 +96,7 @@ app.post(
   eventsController.addTask
 );
 
+app.get('/tasks/end/:event_uid', passportJwtValidator, eventsController.endTask)
+app.post('/tasks/participate/:event_uid', passportJwtValidator, eventsController.participateTask)
 
 module.exports = app;

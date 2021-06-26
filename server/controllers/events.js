@@ -141,54 +141,7 @@ module.exports = {
    
 
   },
-  /*approveEvent: async (req, res, next) => {
-    const { uid } = req.params;
-    if(req.user.accountType === "admin") {
-      await eventModel.
-      findOneAndUpdate(
-        { uid },
-        {"accepted" : true}
-      )
-      .then((response) =>{ 
-        return res
-          .status(200)
-          .json({message: "Event has been accepted", error: false})
-      })
-      .catch((error) => {
-        return res
-          .status(200)
-          .json({message: data, error: true})
-      })
-    } else {
-      return res
-        .status(200)
-        .json({message: "Not authorized for the following action", error: true})
-    }
 
-  },
-  denyEvent: async (req, res, next) => {
-    const { uid } = req.params;
-    if(req.user.accountType === "admin") {
-      await eventModel.
-      findOneAndDelete(
-        { uid }
-      )
-      .then((response) =>{ 
-        return res
-          .status(200)
-          .json({message: "Event has been denied", error: false})
-      })
-      .catch((error) => {
-        return res
-          .status(200)
-          .json({message: data, error: true})
-      })
-    } else {
-      return res
-        .status(200)
-        .json({message: "Not authorized for the following action", error: true})
-    }
-  },*/
   editEvent: async (req, res, next) => {
     const { uid } = req.params;
     let { description, title } = req.body;
@@ -266,7 +219,7 @@ module.exports = {
         await eventModel
           .findOneAndUpdate(
             { uid },
-            { $push: { participants: [participant] } },
+            { $push: { participants: req.user._id } },
             { new: true }
           )
           .then((response) => {
@@ -276,7 +229,7 @@ module.exports = {
               {"uid": req.user.uid},
               {$push: {events: response}}
             ).then((repspnse) => {
-              console.log("BRUH BRUH", response)
+              console.log(response)
             })
             return res
               .status(200)
@@ -403,4 +356,82 @@ module.exports = {
           });
       });
   },
+  endTask: async (req, res, next) => {
+    const {event_uid} = req.params;
+    tasksModel.findOneAndUpdate({uid: event_uid}, {"taskStatus": "done"}).then((response) => {
+      return res.status(200).json({error: false, message: 'Task ended!'})
+    }).catch((error) => {
+      return res.status(200).json({error: true, message: error})
+    })
+  },
+  participateTask: async (req, res, next) => {
+    
+    const {event_uid} = req.params;
+
+    let { participate } = req.body;
+    if (participate === undefined || participant === null) participate = true;
+
+    if (validateId(event_uid)) {
+      if (participate) {
+        await tasksModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $push: { participants: req.user._id } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {tasks: response}}
+            ).then((repspnse) => {
+              console.log(response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'Not validated // we found the event',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+
+      } else {
+        await tasksModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $pull: { participants: { $in: [participant] } } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {tasks: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'we found the event',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+      }
+    }
+  }
 };

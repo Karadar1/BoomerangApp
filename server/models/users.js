@@ -34,7 +34,18 @@ const userSchema = new Schema({
       ref: 'events',
     },
   ],
-
+  subprojects: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'subprojects'
+    }
+  ],
+  tasks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'tasks'
+    }
+  ],
   interests: {
     type: String,
     default: ''
