@@ -10,7 +10,7 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password_verify, setPasswordVerify] = useState('')
-  const [isBusiness, setBusiness] = useState(false)
+  const [accountType, setAccountType] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
   let history = useHistory()
@@ -35,10 +35,10 @@ export default function Register() {
           />
         )
       }
-      case 'isBusiness': {
+      case 'accountType': {
         return (
           <input
-            onChange={(event) => setBusiness(event.target.checked)}
+            onChange={(event) => setAccountType(event.target.checked)}
             type="checkbox"
           />
         )
@@ -77,7 +77,7 @@ export default function Register() {
       username,
       email,
       password,
-      isBusiness,
+      accountType,
     }
 
     axios
@@ -103,7 +103,7 @@ export default function Register() {
         {renderInput('password_verify')}
       </div>
       <div className="InputWrapper Label">
-        {renderInput('isBusiness')} Business account
+        {renderInput('accountType')} Business account
       </div>
 
       <br />

@@ -35,9 +35,9 @@ const userSchema = new Schema({
     },
   ],
 
-  iterests: {
+  interests: {
     type: String,
-    required: true,
+    default: ''
   },
 });
 

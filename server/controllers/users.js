@@ -23,17 +23,11 @@ tokenSign = (user) => {
 
 module.exports = {
   getUser: async (req, res, next) => {
-    const userData = {
-      username: req.user.username,
-      uid: req.user.uid,
-      email: req.user.email,
-      isBusiness: req.user.isBusiness,
-    };
 
     return res.status(200).json({
       message: 'User found',
       error: false,
-      data: userData,
+      data: req.user,
     });
   },
 
@@ -64,7 +58,7 @@ module.exports = {
   },
 
   signUpUser: async (req, res, next) => {
-    const { username, password, email, isBusiness } = req.body;
+    const { username, password, email, accountType } = req.body;
     const uid = uuidv4();
     let userFound = await userModel.findOne({ username });
     if (userFound) {
@@ -78,7 +72,7 @@ module.exports = {
       password,
       email,
       uid,
-      isBusiness,
+      accountType,
     });
     await newUser.save();
 
@@ -114,7 +108,7 @@ module.exports = {
       return res.status(200).json({ message: 'no user here', error: true });
     }
     const { uid } = req.user;
-    const { username, email, isBusiness } = req.body;
+    const { username, email, accountType } = req.body;
     let password =
       req.body &&
       req.body.password !== undefined &&
@@ -153,7 +147,7 @@ module.exports = {
 
           .json({
             message: 'we found the user',
-            data: { username, email, uid, isBusiness },
+            data: { username, email, uid, accountType },
             // token
           });
       })
