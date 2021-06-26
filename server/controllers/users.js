@@ -58,7 +58,7 @@ module.exports = {
   },
   approveOrg: async(req, res, next) => {
     const { uid } = req.params;
-    await userModel.findOneAndUpdate({"approved": true}).then((response) =>{
+    await userModel.findOneAndUpdate({uid}, {"approved": true}).then((response) =>{
       return res.status(200).json({
         message: "Organization has been approved",
         data: response

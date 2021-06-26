@@ -92,18 +92,14 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-        if (response.data.error) {
-          return window.alert(response.data.message);
-        } else {
-          setEvent(response.data.response);
-        }
+        window.location.reload();
+          //setEvent(response.data.response);
+        console.log(response);
       });
   };
   const viewUser = () => {
     history.push(`/viewUser/${event.authorUid}`);
   };
-
-
 
     return (
       <div className='Event EventView' id={event.uid} key={event.uid}>
