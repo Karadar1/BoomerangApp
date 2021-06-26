@@ -8,6 +8,8 @@ const {
   subprojectsModel,
   tasksModel,
 } = require('../models/events');
+
+const userModel = require('../models/users');
 const { response } = require('../app');
 
 module.exports = {
@@ -268,6 +270,14 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
+            console.log(userModel)
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {events: response}}
+            ).then((response) => {
+              console.log("ojBOUFBEROUFBRGYBRTG", response)
+            })
             return res
               .status(200)
 
@@ -282,6 +292,7 @@ module.exports = {
               .status(200)
               .json({ message: 'failed attempt', error: true });
           });
+
       } else {
         await eventModel
           .findOneAndUpdate(

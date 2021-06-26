@@ -74,7 +74,7 @@ export default function PortalLayout({ content }) {
                 <div>You are currently not authorized to add projects</div>
               ) : (
                 <div></div>
-              )
+              ) 
               }
 
               <div className="InputWrapper InputWrapperSpacer Center">

@@ -92,7 +92,7 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-        window.location.reload();
+       // window.location.reload();
           //setEvent(response.data.response);
         console.log(response);
       });

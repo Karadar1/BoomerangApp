@@ -70,6 +70,7 @@ module.exports = {
     if (validateId(uid)) {
       await userModel
         .findOne({ uid })
+        .populate("events")
         .then((response) => {
           console.log(response);
           return res.status(200).json({

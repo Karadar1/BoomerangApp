@@ -32,6 +32,7 @@ export const UserView = () => {
           if (response.data.error) {
             return history.push('/');
           } else {
+            console.log(response.data.data)
             return setUserData(response.data.response);
           }
         });
