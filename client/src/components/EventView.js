@@ -37,7 +37,16 @@ export default function EventView({ user }) {
     }
   }, [uid]);
 
-
+  const eventApprove = async () => {
+    await axios.get(`${serverUrl}/events/approve/${uid}`, {
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    })
+    .then((response) =>{
+      return response;
+    })
+  }
 
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
@@ -126,6 +135,9 @@ export default function EventView({ user }) {
           >
             <div>Location : {` ${event.location}`}</div>
           </a>
+          <div className='ReadMoreBtn Button' onClick={() => eventApprove()}>
+                  Approve
+          </div>
           <div className='eventDate'>Time: {event.timeStamp}</div>
           <div className='eventDate'>Date: {event.date}</div>
         </div>

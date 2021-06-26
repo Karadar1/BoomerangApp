@@ -158,6 +158,34 @@ module.exports = {
     }
 
   },
+  approveEvent: async (req, res, next) => {
+    const { uid } = req.params;
+    if(req.user.accountType === "admin") {
+      await eventModel.
+      findOneAndUpdate(
+        { uid },
+        {"accepted" : true}
+      )
+      .then((response) =>{ 
+        return res
+          .status(200)
+          .json({message: "Event has been accepted", error: false})
+      })
+      .catch((error) => {
+        return res
+          .status(200)
+          .json({message: data, error: true})
+      })
+    } else {
+      return res
+        .status(200)
+        .json({message: "Not authorized for the following action", error: true})
+    }
+
+  },
+  denyEvent: async (req, res, next) => {
+
+  },
   editEvent: async (req, res, next) => {
     const { uid } = req.params;
     let { description, title } = req.body;

@@ -79,6 +79,9 @@ app.post(
   eventsController.participateEvent
 );
 
+app.get('/events/approve/:uid', passportJwtValidator, eventsController.approveEvent)
+
+
 app.post(
   '/subevents/add/:event_uid',
   passportJwtValidator,
@@ -90,5 +93,6 @@ app.post(
   passportJwtValidator,
   eventsController.addTask
 );
+
 
 module.exports = app;
