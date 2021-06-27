@@ -36,6 +36,7 @@ export default function EventView({ user }) {
         if (response.data.error) {
           return history.push('/');
         } else {
+          console.log(response.data.response);
           return setEvent(response.data.response);
         }
       });
@@ -183,6 +184,7 @@ export default function EventView({ user }) {
   const renderTasks = (task) => (
     <div key={task.uid} className='Event'>
       <div className='EventTitle'>Task</div>
+      <div className='eventDescription'>Description: {task.description}</div>
       <div className='eventDate'>Title: {task.title}</div>
       <div className='eventDate'>Time: {task.timeStamp}</div>
       <div className='eventDate'>Date: {task.date}</div>
@@ -216,6 +218,7 @@ export default function EventView({ user }) {
       >
         <div>Location : {` ${event.location}`}</div>
       </a>
+      <div className="eventDescription">Description: {event.description}</div>
       <div className='eventDate'>Time: {event.timeStamp}</div>
       <div className='eventDate'>Date: {event.date}</div>
       {event.tasks.map((task) => renderTasks(task))}
@@ -276,7 +279,6 @@ export default function EventView({ user }) {
         <div className='EventTitle'>{event.title}</div>
       </div>
 
-      <div className='EventDescription'>{event.description}</div>
       <div className='EventMidSection'>
         {renderEvent("event", event)}
 

@@ -81,7 +81,7 @@ export default function EventForm({ callback }) {
       <p>Time</p>
       <div>{renderInput('time')}</div>
       <br />
-      <div
+      <div className="addButton"
         onClick={() =>
           callback({
             title,
