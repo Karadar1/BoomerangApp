@@ -181,15 +181,21 @@ export default function EventView({ user }) {
   };
 
   const renderTasks = (task) => (
-    <div key={task.uid} className='EventInfo'>
+    <div key={task.uid} className='Event'>
+      <div className='EventTitle'>Task</div>
       <div className='eventDate'>Title: {task.title}</div>
       <div className='eventDate'>Time: {task.timeStamp}</div>
       <div className='eventDate'>Date: {task.date}</div>
     </div>
   );
 
-  const renderEvent = (event) => (
-    <div key={event.uid} className='EventInfo'>
+  const renderEvent = (type, event) => (
+    
+    <div key={event.uid} className={(type === "event") ? "EventInfo" : "Event"}>
+      {(type !== "event") ? (
+      <div className="EventTitle" >Subproject</div>
+
+      ):null}
       <div className='eventAuthor' onClick={() => viewUser()}>
         Author: {event.author}
       </div>
@@ -212,7 +218,6 @@ export default function EventView({ user }) {
       </a>
       <div className='eventDate'>Time: {event.timeStamp}</div>
       <div className='eventDate'>Date: {event.date}</div>
-      {event.tasks.length ? <h1>tasks</h1> : null}
       {event.tasks.map((task) => renderTasks(task))}
     </div>
   );
@@ -220,8 +225,8 @@ export default function EventView({ user }) {
   if (uid === '' || _.isEmpty(event)) return false;
 
   return (
-    <div className='EventBox' id={event.uid} key={event.uid}>
-      {!_.isEmpty(event) && (
+    <div>
+            {!_.isEmpty(event) && (
         <>
           {hasAdminRights() ? (
             <div>
@@ -248,6 +253,8 @@ export default function EventView({ user }) {
           ) : null}
         </>
       )}
+    <div className='Event' id={event.uid} key={event.uid}>
+
       {addTaskStatus ? (
         <div>
           taskTitle
@@ -264,14 +271,14 @@ export default function EventView({ user }) {
           </button>
         </div>
       ) : null}
-      <hr />
+      
       <div className='EventBar'>
         <div className='EventTitle'>{event.title}</div>
       </div>
 
       <div className='EventDescription'>{event.description}</div>
       <div className='EventMidSection'>
-        {renderEvent(event)}
+        {renderEvent("event", event)}
 
         {canParticipate() ? (
           alreadyParticipate() ? (
@@ -291,11 +298,13 @@ export default function EventView({ user }) {
           )
         ) : null}
 
-        <h1> subproject</h1>
-        {event.subprojects.length
-          ? event.subprojects.map((subproject) => renderEvent(subproject))
-          : null}
+        
       </div>
+      
     </div>
+    {event.subprojects.length
+      ? event.subprojects.map((subproject) => renderEvent("subproject", subproject))
+      : null}
+      </div>
   );
 }

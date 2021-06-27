@@ -49,6 +49,7 @@ export const AdminDashboard = () => {
   }
   
   return orgs.map((event, index) => {
+    console.log("APProVEd or not", event.approved)
     return (
       <>
       <div key={event.uid} className="EventsContainer">
@@ -56,7 +57,7 @@ export const AdminDashboard = () => {
           <div className="EventBar">
             <div className="EventTitle">{event.username}</div>
           </div>
-          {!event.approved ? (
+          {event.approved === "false" ? (
             <div>
             <div className='ReadMoreBtn Button' onClick={() => orgApprove(event.uid)}>Approve</div>
             <div className='ReadMoreBtn Button' onClick={() => orgDeny(event.uid)}>Deny</div>   
