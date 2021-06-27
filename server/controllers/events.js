@@ -438,5 +438,80 @@ module.exports = {
           });
       }
     }
+  },
+  participateSubevent: async (req, res, next) => {
+    
+    const {event_uid} = req.params;
+    let { participate } = req.body;
+    if (participate === undefined) {
+      participate = true;
+    } else {
+      participate = false;
+    }
+    console.log(participate);
+
+    if (validateId(event_uid)) {
+      if (participate) {
+        await subprojectsModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $push: { participants: req.user._id } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {subprojects: response}}
+            ).then((repspnse) => {
+              console.log(response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'Not validated // we found the task',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+
+      } else {
+        await subprojectsModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $pull: { participants: { $in: [req.user._id] } } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {subprojects: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'we found the event',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+      }
+    }
   }
+  
 };

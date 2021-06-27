@@ -91,6 +91,12 @@ app.post(
 );
 
 app.post(
+  '/subevents/participate/:event_uid',
+  passportJwtValidator,
+  eventsController.participateSubevent
+);
+
+app.post(
   '/tasks/add/:event_uid',
   passportJwtValidator,
   eventsController.addTask
