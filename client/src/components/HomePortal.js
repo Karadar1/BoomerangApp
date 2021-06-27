@@ -52,9 +52,10 @@ export default function EventList({ user, search }) {
     const newEventList = Object.values(eventList).filter(
       (event) => event.title.toLowerCase().indexOf(search.toLowerCase()) !== -1
     );
-
+      console.log(user, "USER ACCOUNT YEPE")
 
     if (user.accountType == "admin") {
+      console.log("TCFYVGBUHIBUYFCTVYGBUHJNKGVYCFTGVBHIJNOIHUGVJBKNLNJHGCFHVBJKNHGVCFHVJBKNLBHGVFC")
       return history.push('/adminDashboard')
     }
 

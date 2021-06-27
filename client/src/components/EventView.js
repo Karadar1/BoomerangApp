@@ -85,7 +85,7 @@ export default function EventView({ user }) {
   };
 
   const canParticipate = () => {
-    if (user.accountType) return false;
+    if (user.accountType === "true") return false;
     return true;
   };
 

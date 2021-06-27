@@ -25,7 +25,7 @@ const userSchema = new Schema({
     minLenght: 8,
   },
   accountType: {
-    type: Boolean,
+    type: String,
     required: true,
   },
   events: [
