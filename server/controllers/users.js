@@ -163,6 +163,7 @@ module.exports = {
         username,
         email,
         uid,
+        interests,
       };
     } else {
       const salt = await bcrypt.genSalt(10);
