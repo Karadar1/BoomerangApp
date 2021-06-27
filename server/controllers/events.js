@@ -219,18 +219,10 @@ module.exports = {
         await eventModel
           .findOneAndUpdate(
             { uid },
-            { $push: { participants: req.user._id } },
+            { $push: { participants: [participant] } },
             { new: true }
           )
           .then((response) => {
-            console.log(userModel)
-            userModel.
-            findOneAndUpdate(
-              {"uid": req.user.uid},
-              {$push: {events: response}}
-            ).then((repspnse) => {
-              console.log(response)
-            })
             return res
               .status(200)
 
@@ -245,7 +237,6 @@ module.exports = {
               .status(200)
               .json({ message: 'failed attempt', error: true });
           });
-
       } else {
         await eventModel
           .findOneAndUpdate(
@@ -254,13 +245,6 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
-            userModel.
-            findOneAndUpdate(
-              {"uid": req.user.uid},
-              {$pull: {events: {$in: [response] }}}
-            ).then((repspnse) => {
-              console.log("BRUH BRU2H", response)
-            })
             return res
               .status(200)
 

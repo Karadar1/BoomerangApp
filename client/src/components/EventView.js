@@ -52,16 +52,10 @@ export default function EventView({ user }) {
     }
   }, [getData, history, uid]);
 
- 
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
   };
-
-  const isUserAdmin = () => {
-    if(user.accountType === "admin") return true;
-    return false;
-  }
 
   const eventDelete = async () => {
     await axios
@@ -80,12 +74,13 @@ export default function EventView({ user }) {
   };
 
   const alreadyParticipate = () => {
+    console.log("USER UID", user.uid);
     
     if (event?.participants.length === 0) return false;
     let newIsUserParticipating = event.participants.some(
       (eachParticipant) => eachParticipant.uid === user.uid
     );
-    console.log("FCYTVUBIOJUUYCGUVBHIJOIHGVUH", newIsUserParticipating)
+    console.log("PARITICPAT", newIsUserParticipating)
     return newIsUserParticipating;
   };
 
@@ -111,9 +106,11 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-       window.location.reload();
-          //setEvent(response.data.response);
-        console.log(response);
+        if (response.data.error) {
+          return window.alert(response.data.message);
+        } else {
+          setEvent(response.data.data);
+        }
       });
   };
 
