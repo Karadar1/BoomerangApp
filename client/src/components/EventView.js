@@ -6,6 +6,10 @@ import _ from 'lodash';
 import participateIcon from '../assets/icons/support.svg';
 import leaveIcon from '../assets/icons/logout.svg';
 import EventForm from './EventForm';
+import DeleteIcon from '../assets/icons/delete.svg'
+import EditIcon from '../assets/icons/edit.svg'
+import Add from '../assets/icons/plus.svg'
+
 
 export default function EventView({ user }) {
   let history = useHistory();
@@ -14,8 +18,12 @@ export default function EventView({ user }) {
   const [addTaskStatus, setAddTaskStatus] = useState(false);
   const [taskName, setTaskName] = useState('');
   const [addTaskId, setAddTaskId] = useState(-1);
-
   const [subProject, setSubProject] = useState({});
+  const [eventForm, setEventForm] = useState(false)
+
+
+
+
 
   const getData = useCallback(() => {
     axios
@@ -52,10 +60,16 @@ export default function EventView({ user }) {
     }
   }, [getData, history, uid]);
 
+ 
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
   };
+
+  const isUserAdmin = () => {
+    if(user.accountType === "admin") return true;
+    return false;
+  }
 
   const eventDelete = async () => {
     await axios
@@ -74,18 +88,17 @@ export default function EventView({ user }) {
   };
 
   const alreadyParticipate = () => {
-    console.log("USER UID", user.uid);
     
     if (event?.participants.length === 0) return false;
     let newIsUserParticipating = event.participants.some(
       (eachParticipant) => eachParticipant.uid === user.uid
     );
-    console.log("PARITICPAT", newIsUserParticipating)
+    console.log("FCYTVUBIOJUUYCGUVBHIJOIHGVUH", newIsUserParticipating)
     return newIsUserParticipating;
   };
 
   const canParticipate = () => {
-    if (user.accountType === "true") return false;
+    if (user.accountType) return false;
     return true;
   };
 
@@ -106,11 +119,9 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-        if (response.data.error) {
-          return window.alert(response.data.message);
-        } else {
-          setEvent(response.data.data);
-        }
+       window.location.reload();
+          //setEvent(response.data.response);
+        console.log(response);
       });
   };
 
@@ -140,7 +151,8 @@ export default function EventView({ user }) {
         if (response.data.error) {
           return history.push('/');
         } else {
-          return getData();
+          setEventForm(false);
+          return getData() ;
         }
       });
   };
@@ -208,28 +220,31 @@ export default function EventView({ user }) {
   if (uid === '' || _.isEmpty(event)) return false;
 
   return (
-    <div className='Event EventView' id={event.uid} key={event.uid}>
+    <div className='EventBox' id={event.uid} key={event.uid}>
       {!_.isEmpty(event) && (
         <>
           {hasAdminRights() ? (
-            <>
-              <div
-                className='ReadMoreBtn Button'
+            <div>
+              <div className='alterIcons'>
+              <div className='iconDiv'
                 onClick={() => eventSendInfo()}
               >
-                Edit
+                <img src={EditIcon} alt="" className='alterEvent' />
+                
               </div>
-              <div
-                className='ReadMoreBtn Button'
+              <div className='iconDiv'
                 onClick={(e) => eventDelete()}
               >
-                Delete
+                <img src={DeleteIcon} alt="" className='alterEvent' />
+              </div>
+                <div className='addButton' onClick={()=>setEventForm(true)}>Create Sub-event<img src={Add} alt="" className='alterEvent'/></div>
               </div>
               <div>
-                <h1>add subevent</h1>
-                <EventForm callback={(data) => addSubProject(data)} />
+                {eventForm && (<h1>add subevent</h1>,
+                <EventForm callback={(data) => addSubProject(data)}/>)}
+                
               </div>
-            </>
+            </div>
           ) : null}
         </>
       )}
