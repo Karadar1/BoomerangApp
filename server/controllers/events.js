@@ -364,12 +364,17 @@ module.exports = {
       return res.status(200).json({error: true, message: error})
     })
   },
+  //TODO FIX THIS HACKY MESS
   participateTask: async (req, res, next) => {
     
     const {event_uid} = req.params;
-
     let { participate } = req.body;
-    if (participate === undefined || participant === null) participate = true;
+    if (participate === undefined) {
+      participate = true;
+    } else {
+      participate = false;
+    }
+    console.log(participate);
 
     if (validateId(event_uid)) {
       if (participate) {
@@ -391,7 +396,7 @@ module.exports = {
               .status(200)
 
               .json({
-                message: 'Not validated // we found the event',
+                message: 'Not validated // we found the task',
                 data: response,
                 error: false,
               });
@@ -406,7 +411,7 @@ module.exports = {
         await tasksModel
           .findOneAndUpdate(
             { uid: event_uid },
-            { $pull: { participants: { $in: [participant] } } },
+            { $pull: { participants: { $in: [req.user._id] } } },
             { new: true }
           )
           .then((response) => {
