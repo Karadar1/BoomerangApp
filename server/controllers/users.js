@@ -28,6 +28,7 @@ module.exports = {
       uid: req.user.uid,
       email: req.user.email,
       isBusiness: req.user.isBusiness,
+      interests: req.user.interests,
     };
 
     return res.status(200).json({
@@ -64,7 +65,7 @@ module.exports = {
   },
 
   signUpUser: async (req, res, next) => {
-    const { username, password, email, isBusiness } = req.body;
+    const { username, password, email, isBusiness, interests } = req.body;
     const uid = uuidv4();
     let userFound = await userModel.findOne({ username });
     if (userFound) {
@@ -79,6 +80,7 @@ module.exports = {
       email,
       uid,
       isBusiness,
+      interests,
     });
     await newUser.save();
 
@@ -114,7 +116,7 @@ module.exports = {
       return res.status(200).json({ message: 'no user here', error: true });
     }
     const { uid } = req.user;
-    const { username, email, isBusiness } = req.body;
+    const { username, email, isBusiness, interests } = req.body;
     let password =
       req.body &&
       req.body.password !== undefined &&
@@ -129,6 +131,7 @@ module.exports = {
         username,
         email,
         uid,
+        interests,
       };
     } else {
       const salt = await bcrypt.genSalt(10);

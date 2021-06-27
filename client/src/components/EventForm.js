@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { serverUrl } from '../utils/constants';
 
-export default function EventAdd() {
+export default function EventForm({ callback }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
@@ -68,43 +68,30 @@ export default function EventAdd() {
     }
   };
 
-  const addEvent = () => {
-    const dataToBeSent = {
-      title,
-      description,
-      timeStamp,
-      location,
-      date,
-    };
-
-    axios
-      .post(`${serverUrl}/events/add`, dataToBeSent, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-      .then((response) => {
-        if (response.data.error) {
-          return setErrorMessage(response.data.message);
-        } else {
-          return history.push('/');
-        }
-      });
-  };
   return (
-    <div className='Form'>
-      <p className='Label'>Title</p>
-      <div className='InputWrapper'>{renderInput('title')}</div>
-      <p className='Label'>Description</p>
-      <div className='InputWrapper'>{renderInput('description')}</div>
-      <p className='Label'>Location</p>
-      <div className='InputWrapper'>{renderInput('location')}</div>
-      <p className='Label'>Date</p>
-      <div className='InputWrapper'>{renderInput('date')}</div>
-      <p className='Label'>Time</p>
-      <div className='InputWrapper'>{renderInput('time')}</div>
+    <div>
+      <p>Title</p>
+      <div>{renderInput('title')}</div>
+      <p>Description</p>
+      <div>{renderInput('description')}</div>
+      <p>Location</p>
+      <div>{renderInput('location')}</div>
+      <p>Date</p>
+      <div>{renderInput('date')}</div>
+      <p>Time</p>
+      <div>{renderInput('time')}</div>
       <br />
-      <div className='LogButton Button' onClick={() => addEvent()}>
+      <div
+        onClick={() =>
+          callback({
+            title,
+            description,
+            timeStamp,
+            location,
+            date,
+          })
+        }
+      >
         Add event
       </div>
       <br />

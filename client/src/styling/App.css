@@ -276,6 +276,12 @@ a {
 .EventAuthor {
   float: right;
 }
+.eventAuthor {
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
 /* .EventTitle {
   width: 100%;
   display: flex;
@@ -326,6 +332,7 @@ a {
 /* Tudor Styling Take */
 .EventMidSection {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 

@@ -24,8 +24,8 @@ const userSchema = new Schema({
     required: true,
     minLenght: 8,
   },
-  accountType: {
-    type: String,
+  isBusiness: {
+    type: Boolean,
     required: true,
   },
   events: [
@@ -35,10 +35,11 @@ const userSchema = new Schema({
     },
   ],
 
-  iterests: {
-    type: String,
-    required: true,
-  },
+  interests: [
+    {
+      type: String,
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
