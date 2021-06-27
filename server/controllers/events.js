@@ -8,6 +8,8 @@ const {
   subprojectsModel,
   tasksModel,
 } = require('../models/events');
+
+const userModel = require('../models/users');
 const { response } = require('../app');
 
 module.exports = {
@@ -113,33 +115,22 @@ module.exports = {
     }
   },
   getEvents: async (req, res, next) => {
+
     const { count, offset } = req.params;
     let eventsInDatabase;
     await eventModel.countDocuments({}, (err, c) => {
       eventsInDatabase = c;
     });
-    await eventModel
+      await eventModel
       .find({})
       .limit(parseInt(count))
       .skip(parseInt(offset))
       .then((response) => {
-        const reducedArray = response.reduce((accumulator, currentValue) => {
-          const reducedObject = {
-            uid: currentValue.uid,
-            title: currentValue.title,
-            author: currentValue.author,
-            description: currentValue.description,
-            date: currentValue.date,
-            timeStamp: currentValue.timeStamp,
-            location: currentValue.location,
-            participants: currentValue.participants,
-          };
-          return [...accumulator, reducedObject];
-        }, []);
+
 
         return res.status(200).json({
-          message: 'We found events',
-          data: reducedArray,
+          message: 'serving all events',
+          data: response,
           error: false,
           eventsInDatabase,
         });
@@ -147,7 +138,10 @@ module.exports = {
       .catch((error) => {
         return res.status(200).json({ message: 'failed attempt', error: true });
       });
+   
+
   },
+
   editEvent: async (req, res, next) => {
     const { uid } = req.params;
     let { description, title } = req.body;
@@ -225,10 +219,18 @@ module.exports = {
         await eventModel
           .findOneAndUpdate(
             { uid },
-            { $push: { participants: [participant] } },
+            { $push: { participants: req.user._id } },
             { new: true }
           )
           .then((response) => {
+            console.log(userModel)
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {events: response}}
+            ).then((repspnse) => {
+              console.log(response)
+            })
             return res
               .status(200)
 
@@ -243,6 +245,7 @@ module.exports = {
               .status(200)
               .json({ message: 'failed attempt', error: true });
           });
+
       } else {
         await eventModel
           .findOneAndUpdate(
@@ -251,6 +254,13 @@ module.exports = {
             { new: true }
           )
           .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {events: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
             return res
               .status(200)
 
@@ -346,4 +356,162 @@ module.exports = {
           });
       });
   },
+  endTask: async (req, res, next) => {
+    const {event_uid} = req.params;
+    tasksModel.findOneAndUpdate({uid: event_uid}, {"taskStatus": "done"}).then((response) => {
+      return res.status(200).json({error: false, message: 'Task ended!'})
+    }).catch((error) => {
+      return res.status(200).json({error: true, message: error})
+    })
+  },
+  //TODO FIX THIS HACKY MESS
+  participateTask: async (req, res, next) => {
+    
+    const {event_uid} = req.params;
+    let { participate } = req.body;
+    if (participate === undefined) {
+      participate = true;
+    } else {
+      participate = false;
+    }
+    console.log(participate);
+
+    if (validateId(event_uid)) {
+      if (participate) {
+        await tasksModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $push: { participants: req.user._id } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {tasks: response}}
+            ).then((repspnse) => {
+              console.log(response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'Not validated // we found the task',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+
+      } else {
+        await tasksModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $pull: { participants: { $in: [req.user._id] } } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {tasks: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'we found the event',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+      }
+    }
+  },
+  participateSubevent: async (req, res, next) => {
+    
+    const {event_uid} = req.params;
+    let { participate } = req.body;
+    if (participate === undefined) {
+      participate = true;
+    } else {
+      participate = false;
+    }
+    console.log(participate);
+
+    if (validateId(event_uid)) {
+      if (participate) {
+        await subprojectsModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $push: { participants: req.user._id } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$push: {subprojects: response}}
+            ).then((repspnse) => {
+              console.log(response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'Not validated // we found the task',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+
+      } else {
+        await subprojectsModel
+          .findOneAndUpdate(
+            { uid: event_uid },
+            { $pull: { participants: { $in: [req.user._id] } } },
+            { new: true }
+          )
+          .then((response) => {
+            userModel.
+            findOneAndUpdate(
+              {"uid": req.user.uid},
+              {$pull: {subprojects: {$in: [response] }}}
+            ).then((repspnse) => {
+              console.log("BRUH BRU2H", response)
+            })
+            return res
+              .status(200)
+
+              .json({
+                message: 'we found the event',
+                data: response,
+                error: false,
+              });
+          })
+          .catch((error) => {
+            return res
+              .status(200)
+              .json({ message: 'failed attempt', error: true });
+          });
+      }
+    }
+  }
+  
 };

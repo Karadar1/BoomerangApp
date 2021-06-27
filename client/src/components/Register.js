@@ -11,10 +11,11 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_verify, setPasswordVerify] = useState('');
-  const [isBusiness, setBusiness] = useState(false);
+  const [accountType, setAccountType] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
   const [interests, setInterests] = useState(['']);
   let history = useHistory();
+
 
   const handleInterests = (event) => {
     const index = interests.indexOf(event.target.name);
@@ -74,11 +75,11 @@ export default function Register() {
           />
         );
       }
-      case 'isBusiness': {
+      case 'accountType': {
         return (
           <input
-            onChange={(event) => setBusiness(event.target.checked)}
-            type='checkbox'
+            onChange={(event) => event.target.checked ? setAccountType("org") : setAccountType("volunteer") }
+            type="checkbox"
           />
         );
       }
@@ -117,9 +118,10 @@ export default function Register() {
       username,
       email,
       password,
-      isBusiness,
       interests,
+      accountType,
     };
+    }
 
     axios
       .post(`${serverUrl}/user/signup`, userDataToBeSent)
@@ -148,7 +150,7 @@ export default function Register() {
       <br />
       <div className='InputWrapper Label'>
         <p className='Label'>User Type</p>
-        {renderInput('isBusiness')} Organization account
+        {renderInput('accountType')} I am an organization.
       </div>
 
       <br />

@@ -5,7 +5,7 @@ import { serverUrl } from '../utils/constants';
 import { useHistory } from 'react-router-dom';
 
 export default function EventList({ user, search }) {
-  const APILimit = isMobile ? 5 : 20;
+  const APILimit = isMobile ? 5 : 20
 
   const [eventList, setEventList] = useState([]);
   const [offset, setOffset] = useState(0);
@@ -16,7 +16,6 @@ export default function EventList({ user, search }) {
   useEffect(async () => {
     await getData();
   }, []);
-
   const getData = () => {
     return axios
       .get(`${serverUrl}/events/all/${APILimit}/${offset}`, {
@@ -44,6 +43,7 @@ export default function EventList({ user, search }) {
       });
   };
 
+
   const eventSendInfo = (uid) => {
     return history.push(`/viewEvent/${uid}`);
   };
@@ -52,6 +52,11 @@ export default function EventList({ user, search }) {
     const newEventList = Object.values(eventList).filter(
       (event) => event.title.toLowerCase().indexOf(search.toLowerCase()) !== -1
     );
+
+
+    if (user.accountType == "admin") {
+      return history.push('/adminDashboard')
+    }
 
     return newEventList.map((event, index) => {
       let newDescription = event.description;
@@ -101,4 +106,5 @@ export default function EventList({ user, search }) {
       )}
     </>
   );
+
 }

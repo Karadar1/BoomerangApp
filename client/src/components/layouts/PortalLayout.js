@@ -29,7 +29,7 @@ export default function PortalLayout({ content }) {
   const sendToAdd = () => {
     return history.push('/addEvent')
   }
-
+ 
   useEffect(async () => {
     if (!localStorage.getItem('token')) {
       return history.push('/login')
@@ -51,6 +51,12 @@ export default function PortalLayout({ content }) {
     }
   }, [])
 
+  const getUserPriviledge = () => {
+    console.log(user.approved)
+    return user.approved
+  }
+
+
   return (
     <div className="Wrapper">
       {!_.isEmpty(user) && (
@@ -60,9 +66,17 @@ export default function PortalLayout({ content }) {
               <div className="RoundButton" onClick={() => sendToHome()}>
                 <i className="fas fa-home"></i>
               </div>
-              <div className="RoundButton" onClick={() => sendToAdd()}>
+              {getUserPriviledge() === "true" ? (
+                <div className="RoundButton" onClick={() => sendToAdd()}>
                 <i className="fas fa-plus"></i>
               </div>
+              ) : getUserPriviledge() === "false" ? (
+                <div>You are currently not authorized to add projects</div>
+              ) : (
+                <div></div>
+              ) 
+              }
+
               <div className="InputWrapper InputWrapperSpacer Center">
                 <input
                   placeholder="Search"

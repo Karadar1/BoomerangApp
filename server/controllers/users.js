@@ -23,26 +23,54 @@ tokenSign = (user) => {
 
 module.exports = {
   getUser: async (req, res, next) => {
-    const userData = {
-      username: req.user.username,
-      uid: req.user.uid,
-      email: req.user.email,
-      isBusiness: req.user.isBusiness,
-      interests: req.user.interests,
-    };
-
     return res.status(200).json({
       message: 'User found',
       error: false,
-      data: userData,
+      data: req.user,
     });
   },
 
+  getOrgs: async (req, res, next) => {
+    await userModel
+      .find({"accountType": "org"})
+      .then((response) => {
+        return res.status(200).json({
+          message: "We found the organizations",
+          data: response,
+          error: false
+        })
+      })
+      .catch((error) => {
+        return res.status(200).json({
+          error: true, 
+          message: error
+        })
+      })
+  },
+  denyOrg: async (req, res, next) => {
+    const { uid } = req.params;
+    await userModel.findOneAndDelete({ uid }).then((response) => {
+      return res.status(200).json({
+        message: "Organization has been denied",
+        data: response
+      })
+    })
+  },
+  approveOrg: async(req, res, next) => {
+    const { uid } = req.params;
+    await userModel.findOneAndUpdate({uid}, {"approved": true}).then((response) =>{
+      return res.status(200).json({
+        message: "Organization has been approved",
+        data: response
+      })
+    })
+  },
   getOneUser: async (req, res, next) => {
     const { uid } = req.params;
     if (validateId(uid)) {
       await userModel
         .findOne({ uid })
+        .populate("events")
         .then((response) => {
           console.log(response);
           return res.status(200).json({
@@ -65,7 +93,11 @@ module.exports = {
   },
 
   signUpUser: async (req, res, next) => {
-    const { username, password, email, isBusiness, interests } = req.body;
+    const { username, password, email, accountType } = req.body;
+    let approved = 'user';
+    if(accountType === "org") {
+      approved = false
+    }
     const uid = uuidv4();
     let userFound = await userModel.findOne({ username });
     if (userFound) {
@@ -79,8 +111,8 @@ module.exports = {
       password,
       email,
       uid,
-      isBusiness,
-      interests,
+      accountType,
+      approved
     });
     await newUser.save();
 
@@ -116,7 +148,7 @@ module.exports = {
       return res.status(200).json({ message: 'no user here', error: true });
     }
     const { uid } = req.user;
-    const { username, email, isBusiness, interests } = req.body;
+    const { username, email, accountType } = req.body;
     let password =
       req.body &&
       req.body.password !== undefined &&
@@ -156,7 +188,7 @@ module.exports = {
 
           .json({
             message: 'we found the user',
-            data: { username, email, uid, isBusiness },
+            data: { username, email, uid, accountType },
             // token
           });
       })

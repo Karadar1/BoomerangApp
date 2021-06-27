@@ -52,10 +52,16 @@ export default function EventView({ user }) {
     }
   }, [getData, history, uid]);
 
+ 
   const hasAdminRights = () => {
     if (user.uid === event.authorUid) return true;
     return false;
   };
+
+  const isUserAdmin = () => {
+    if(user.accountType === "admin") return true;
+    return false;
+  }
 
   const eventDelete = async () => {
     await axios
@@ -103,11 +109,9 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-        if (response.data.error) {
-          return window.alert(response.data.message);
-        } else {
-          setEvent(response.data.data);
-        }
+       // window.location.reload();
+          //setEvent(response.data.response);
+        console.log(response);
       });
   };
 
@@ -278,6 +282,7 @@ export default function EventView({ user }) {
           ? event.subprojects.map((subproject) => renderEvent(subproject))
           : null}
       </div>
-    </div>
-  );
+    );
+
+
 }

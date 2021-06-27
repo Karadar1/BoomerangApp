@@ -10,6 +10,7 @@ import EventAdd from './components/EventAdd';
 import EventEdit from './components/EventEdit';
 import EventView from './components/EventView';
 import { UserView } from './components/UserView';
+import { AdminDashboard } from './components/AdminDashboard';
 
 function App() {
   return (
@@ -29,7 +30,11 @@ function App() {
         path='/'
         render={() => <PortalLayout content={<HomePortal />} />}
       />
-
+      <Route
+        exact
+        path='/adminDashboard'
+        render={() => <PortalLayout content={<AdminDashboard />} />}
+      />
       <Route
         exact
         path='/editUser'
