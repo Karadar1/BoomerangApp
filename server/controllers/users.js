@@ -32,7 +32,7 @@ module.exports = {
 
   getOrgs: async (req, res, next) => {
     await userModel
-      .find({"accountType": "org"})
+      .find({"accountType": true})
       .then((response) => {
         return res.status(200).json({
           message: "We found the organizations",
@@ -93,9 +93,9 @@ module.exports = {
   },
 
   signUpUser: async (req, res, next) => {
-    const { username, password, email, accountType } = req.body;
+    const { username, password, email, accountType, interests } = req.body;
     let approved = 'user';
-    if(accountType === "org") {
+    if(accountType === true) {
       approved = false
     }
     const uid = uuidv4();
@@ -112,6 +112,7 @@ module.exports = {
       email,
       uid,
       accountType,
+      interests,
       approved
     });
     await newUser.save();

@@ -78,7 +78,7 @@ export default function Register() {
       case 'accountType': {
         return (
           <input
-            onChange={(event) => event.target.checked ? setAccountType("org") : setAccountType("volunteer") }
+            onChange={(event) => event.target.checked ? setAccountType(true) : setAccountType(false) }
             type="checkbox"
           />
         );
@@ -132,41 +132,40 @@ export default function Register() {
         localStorage.setItem('token', response.data.token);
         return history.push('/');
       });
-  
+    }
+      return (
+        <div>
+          <p className='Label'>Username</p>
+          <div className='InputWrapper'>{renderInput('username')}</div>
+          <p className='Label'>Email</p>
+          <div className='InputWrapper'>{renderInput('email')}</div>
+          <p className='Label'>Password</p>
+          <div className='InputWrapper'>{renderInput('password')}</div>
+          <div className='InputWrapper InputWrapperSpacer'>
+            {renderInput('password_verify')}
+          </div>
+          <p className='Label'>Interests</p>
+          <div className='InputWrapper'>{renderIntersts()}</div>
+          <br />
+          <div className='InputWrapper Label'>
+            <p className='Label'>User Type</p>
+            {renderInput('accountType')} I am an organization.
+          </div>
+    
+          <br />
+          <div className='LogButton Button' onClick={() => signupUser()}>
+            Register
+          </div>
+          <br />
+          <p className='LabelSmall'>
+            Have an account?
+            <a className='Link Account' href='/login'>
+              Login now
+            </a>
+          </p>
+    
+          <div className='ErrorMessage'>{errorMessage ?? null}</div>
+        </div>
+      );
 
-  return (
-    <div>
-      <p className='Label'>Username</p>
-      <div className='InputWrapper'>{renderInput('username')}</div>
-      <p className='Label'>Email</p>
-      <div className='InputWrapper'>{renderInput('email')}</div>
-      <p className='Label'>Password</p>
-      <div className='InputWrapper'>{renderInput('password')}</div>
-      <div className='InputWrapper InputWrapperSpacer'>
-        {renderInput('password_verify')}
-      </div>
-      <p className='Label'>Interests</p>
-      <div className='InputWrapper'>{renderIntersts()}</div>
-      <br />
-      <div className='InputWrapper Label'>
-        <p className='Label'>User Type</p>
-        {renderInput('accountType')} I am an organization.
-      </div>
-
-      <br />
-      <div className='LogButton Button' onClick={() => signupUser()}>
-        Register
-      </div>
-      <br />
-      <p className='LabelSmall'>
-        Have an account?
-        <a className='Link Account' href='/login'>
-          Login now
-        </a>
-      </p>
-
-      <div className='ErrorMessage'>{errorMessage ?? null}</div>
-    </div>
-  );
   }
-}

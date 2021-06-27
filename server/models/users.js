@@ -24,7 +24,7 @@ const userSchema = new Schema({
     required: true,
     minLenght: 8,
   },
-  isBusiness: {
+  accountType: {
     type: Boolean,
     required: true,
   },
@@ -46,10 +46,12 @@ const userSchema = new Schema({
       ref: 'tasks'
     }
   ],
-  interests: {
+  interests: [
+    {
     type: String,
     default: ''
-  },
+   }
+  ],
   approved: {
     type: String,
     required: true,

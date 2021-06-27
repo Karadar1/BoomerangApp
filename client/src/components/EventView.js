@@ -80,15 +80,17 @@ export default function EventView({ user }) {
   };
 
   const alreadyParticipate = () => {
+    
     if (event?.participants.length === 0) return false;
     let newIsUserParticipating = event.participants.some(
       (eachParticipant) => eachParticipant.uid === user.uid
     );
+    console.log("FCYTVUBIOJUUYCGUVBHIJOIHGVUH", newIsUserParticipating)
     return newIsUserParticipating;
   };
 
   const canParticipate = () => {
-    if (user.isBusiness) return false;
+    if (user.accountType) return false;
     return true;
   };
 
@@ -109,7 +111,7 @@ export default function EventView({ user }) {
         }
       )
       .then((response) => {
-       // window.location.reload();
+       window.location.reload();
           //setEvent(response.data.response);
         console.log(response);
       });
