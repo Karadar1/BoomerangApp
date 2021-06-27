@@ -47,22 +47,29 @@ export const AdminDashboard = () => {
         return setOrgs(data);
       })
   }
-  console.log(orgs);
+  
   return orgs.map((event, index) => {
     return (
+      <>
       <div key={event.uid} className="EventsContainer">
         <div className="Event">
           <div className="EventBar">
             <div className="EventTitle">{event.username}</div>
           </div>
-          <div className='ReadMoreBtn Button' onClick={() => orgApprove(event.uid)}>
-                  Approve
+          {!event.approved ? (
+            <div>
+            <div className='ReadMoreBtn Button' onClick={() => orgApprove(event.uid)}>Approve</div>
+            <div className='ReadMoreBtn Button' onClick={() => orgDeny(event.uid)}>Deny</div>   
+            </div>
+          ) : (
+            <div></div>
+          )}
+                     
+          
+      
           </div>
-          <div className='ReadMoreBtn Button' onClick={() => orgDeny(event.uid)}>
-                  Deny
-          </div>
-          </div>
-          </div>
+        </div>
+      </>
     )
   })
 };
