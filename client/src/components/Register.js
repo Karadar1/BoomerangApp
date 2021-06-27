@@ -121,7 +121,7 @@ export default function Register() {
       interests,
       accountType,
     };
-    }
+    
 
     axios
       .post(`${serverUrl}/user/signup`, userDataToBeSent)
@@ -132,7 +132,7 @@ export default function Register() {
         localStorage.setItem('token', response.data.token);
         return history.push('/');
       });
-  };
+  
 
   return (
     <div>
@@ -168,4 +168,5 @@ export default function Register() {
       <div className='ErrorMessage'>{errorMessage ?? null}</div>
     </div>
   );
+  }
 }

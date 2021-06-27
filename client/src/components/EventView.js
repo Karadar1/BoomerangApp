@@ -282,7 +282,6 @@ export default function EventView({ user }) {
           ? event.subprojects.map((subproject) => renderEvent(subproject))
           : null}
       </div>
-    );
-
-
+    </div>
+  );
 }
